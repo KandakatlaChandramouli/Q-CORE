@@ -1,17 +1,14 @@
 package crypto
 
-// PublicKey represents an opaque public key.
 type PublicKey interface{}
 
-// PrivateKey represents an opaque private key.
 type PrivateKey interface{}
 
-// Engine defines the behavior required from every signature algorithm.
-//
-// Every implementation must be deterministic with respect to its public API
-// and safe for concurrent use unless documented otherwise.
+// Engine defines the contract implemented by every signature scheme.
 type Engine interface {
 	Algorithm() Algorithm
+
+	Metadata() Metadata
 
 	GenerateKey() (PublicKey, PrivateKey, error)
 
@@ -25,8 +22,4 @@ type Engine interface {
 		message []byte,
 		signature []byte,
 	) error
-
-	PublicKeySize() int
-
-	SignatureSize() int
 }
