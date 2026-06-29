@@ -5,6 +5,8 @@ import (
 	"sync"
 
 	db "github.com/dgraph-io/badger/v4"
+
+	"github.com/KandakatlaChandramouli/Q-CORE/internal/storage"
 )
 
 type Engine struct {
@@ -49,4 +51,15 @@ func (e *Engine) Close() error {
 	e.db = nil
 
 	return err
+}
+
+func (e *Engine) database() (*db.DB, error) {
+	e.mu.RLock()
+	defer e.mu.RUnlock()
+
+	if e.db == nil {
+		return nil, storage.ErrClosed
+	}
+
+	return e.db, nil
 }
